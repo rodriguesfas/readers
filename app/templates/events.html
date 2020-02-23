@@ -1,0 +1,108 @@
+{% extends "layout.html" %} {% block title %}CheckPoint{% endblock %} {% block body %}
+
+<!-- page title area end -->
+<div class="main-content-inner">
+    <div class="row">
+        <!-- Primary table start -->
+        <div class="col-12 mt-5">
+            <!-- Alert -->
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lista de Eventos</h4>
+                    <div aling="right">
+                        <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target=".bd-example-modal-lg">Novo Evento</button>
+                    </div>
+                    <div class="data-tables datatable">
+                        <table id="dataTable2" class="text-center">
+                            <thead class="text-capitalize">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nome do Evento</th>
+                                    <th>Data</th>
+                                    <th>Organizador</th>
+                                    <th>Cidade-UF</th>
+                                    <th>Status</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for event in events %}
+                                <tr>
+                                    <td>{{event._id}}</td>
+                                    <td>{{event.name}}</td>
+                                    <td>{{event.date}}</td>
+                                    <td>{{event.organization}}</td>
+                                    <td>{{event.city}}</td>
+                                    <td><span class="status-p bg-warning">pending</span></td>
+                                    <td>
+                                        <ul class="d-flex justify-content-center">
+                                            <li class="mr-3">
+                                                <a href="{{ url_for('readers', id=event._id) }}" class="btn btn-outline btn-info mb-3">
+                                                    <i class="ti-desktop" title="Gerir Evento"></i>
+                                                </a>
+                                            </li>
+                                            <li class="mr-3">
+                                                <a href="#" class="btn btn-outline btn-warning mb-3">
+                                                    <i class="fa fa-edit" title="Editar Evento"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url_for('delete_event', id=event._id) }}" class="btn btn-outline btn-danger mb-3">
+                                                    <i class="ti-trash" title="Excluir Evento"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Primary table end -->
+    </div>
+</div>
+
+<!-- Novo Evento -->
+<div class="modal fade bd-example-modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Evento</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form method=POST action="{{ url_for('register_event') }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input name="name" class="form-control" type="text" value="" placeholder="Nome do Evento" id="example-text-input" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="date" class="form-control" type="date" value="" placeholder="Organizador" id="example-date-input">
+                    </div>
+                    <div class="form-group">
+                        <input name="organization" class="form-control" type="text" value="" placeholder="Organizador" id="example-text-input" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="city" class="form-control" type="text" value="" placeholder="Cidade-UF" id="example-text-input" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button class="btn btn-primary" type="submit" id="form_submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}:

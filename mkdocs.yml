@@ -1,0 +1,7 @@
+site_name: CheckPoint
+theme: readthedocs
+nav:
+    - Home: index.md
+    - Install: install.md
+    - Used Guide: guide.md
+    - Credits: credits.md

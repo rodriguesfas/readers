@@ -1,0 +1,369 @@
+{% extends "layout.html" %} {% block title %}CheckPoint{% endblock %} {% block body %}
+
+<!-- page title area end -->
+<div class="main-content-inner">
+    <div class="row">
+
+        <!-- tab start -->
+        <div class="col-lg-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-configuration-tab" data-toggle="pill"
+                                href="#pills-configuration" role="tab" aria-controls="pills-configuration"
+                                aria-selected="true"><i class="ti-settings"></i> CONFIGURAÇÕES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-accountants-tab" data-toggle="pill" href="#pills-accountants"
+                                role="tab" aria-controls="pills-accountants" aria-selected="false"><i
+                                    class="ti-pencil-alt"></i> CONTADORES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-readings-tab" data-toggle="pill" href="#pills-readings"
+                                role="tab" aria-controls="pills-readings" aria-selected="false"><i
+                                    class="ti-rss-alt"></i> LEITURAS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-report-tab" data-toggle="pill" href="#pills-report" role="tab"
+                                aria-controls="pills-report" aria-selected="false"><i class="ti-file"></i> RELATÓRIO</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-configuration" role="tabpanel"
+                            aria-labelledby="pills-configuration-tab">
+                            <div class="row">
+                                <!-- Primary table start -->
+                                <div class="col-12 mt-5">
+                                    <!-- Alert -->
+                                    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+                                    {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <p>{{ message }}</p>
+                                    </div>
+                                    {% endfor %} {% endif %} {% endwith %}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-success mb-3" data-toggle="modal"
+                                                data-target=".bd-register-modal-lg">Adicionar Reader</button>
+                                            <div class="single-table">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover progress-table text-center">
+                                                        <thead class="text-capitalize">
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Nome</th>
+                                                                <th>IP</th>
+                                                                <th>Porta</th>
+                                                                <th>Potência (dBm)</th>
+                                                                <th>Status</th>
+                                                                <th>Opções</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for reader in readers %}
+                                                            <tr>
+                                                                <td>{{reader._id}}</td>
+                                                                <td>{{reader.name}}</td>
+                                                                <td>{{reader.ip}}</td>
+                                                                <td>{{reader.port}}</td>
+                                                                <td>
+                                                                    <select class="custom-select">
+                                                                        <option selected="selected" value="32.50">32.50
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td><span class="status-p bg-success">Ativo</span></td>
+                                                                <td>
+                                                                    <ul class="d-flex justify-content-center">
+                                                                        <li class="mr-3">
+                                                                            <a href="#"
+                                                                                class="btn btn-outline btn-warning mb-3"
+                                                                                data-toggle="modal"
+                                                                                data-target=".bd-update-modal-lg">
+                                                                                <i class="fa fa-edit"
+                                                                                    title="Editar Reader"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="{{ url_for('delete_reader', id=reader._id) }}"
+                                                                                class="btn btn-outline btn-danger mb-3">
+                                                                                <i class="ti-trash"
+                                                                                    title="Excluir Reader"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Primary table end -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-accountants" role="tabpanel"
+                            aria-labelledby="pills-accountants-tab">
+                            <p>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover progress-table text-center">
+                                            <thead class="text-capitalize">
+                                                <tr>
+                                                    <th>Reader</th>
+                                                    <th>IP</th>
+                                                    <th>Antena 1</th>
+                                                    <th>Antena 2</th>
+                                                    <th>Antena 3</th>
+                                                    <th>Antena 4</th>
+                                                    <th>Total</th>
+                                                    <th>Opções</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for reader in readers2 %}
+                                                <tr>
+                                                    <td>{{reader.name}}</td>
+                                                    <td>{{reader.ip}}</td>
+                                                    <td>
+                                                        <div id="reader_01">0</div>
+                                                    </td>
+                                                    <td>
+                                                        <div id="reader_02">0</div>
+                                                    </td>
+                                                    <td>
+                                                        <div id="reader_03">0</div>
+                                                    </td>
+                                                    <td>
+                                                        <div id="reader_04">0</div>
+                                                    </td>
+                                                    <td>
+                                                        <div id="reader_all_uniq">0</div>
+                                                    </td>
+                                                    <td>
+                                                        <ul class="d-flex justify-content-center">
+                                                            <li class="mr-3">
+                                                                <button class="btn btn-success mb-3"
+                                                                    id="button_connected"
+                                                                    onclick="status_button_connected();"
+                                                                    value="connected">
+                                                                    <i id="icon_connected" class="ti-rss-alt"><span>
+                                                                            CONECTAR</span></i>
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="btn btn-success mb-3" id="button_started"
+                                                                    onclick="status_button_started();" value="started">
+                                                                    <i id="icon_started"
+                                                                        class="ti-control-play"></i><span>
+                                                                        INICIAR</span>
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-readings" role="tabpanel"
+                            aria-labelledby="pills-readings-tab">
+                            <p>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover progress-table text-center">
+                                            <thead class="text-capitalize">
+                                                <tr>
+                                                    <th>Tag</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                            <p id="tags"></p>
+                                        </table>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-report" role="tabpanel" aria-labelledby="pills-report-tab">
+                            <p>
+                                <a href="{{ url_for('download_report') }}" class="btn btn-outline btn-success mb-3">
+                                    <i class="ti-file" title="Baixar Relatório"></i> Baixar Relatório
+                                </a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- tab end -->
+
+    </div>
+</div>
+
+<!-- New Reader -->
+<div class="modal fade bd-register-modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Novo Reader</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form method=POST action="{{ url_for('register_reader') }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input name="name" class="form-control" type="text" value="" placeholder="Nome do Reader"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <input name="ip" class="form-control" type="text" value="" placeholder="192.168.1.100" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="port" class="form-control" type="text" value="" placeholder="8080" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button class="btn btn-success" type="submit" id="form_submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Reader -->
+{% for reader in readers %} {{reader._id}}
+<div class="modal fade bd-update-modal-lg" id="bd-update-modal-lg-{{reader._id}}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Atualizar Dados do Reader</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form method=POST action="{{ url_for('update_reader') }}">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input name="name" class="form-control" type="text" value="{{reader._id}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <input name="name" class="form-control" type="text" value="{{reader.name}}"
+                            placeholder="Nome do Reader" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="ip" class="form-control" type="text" value="{{reader.ip}}"
+                            placeholder="192.168.1.100" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button class="btn btn-success" type="submit" id="form_submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Events -->
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+/**
+    $(function () {
+        $(document).keydown(function (e) {
+            return (e.which || e.keyCode) != 116;
+        });
+    });
+*/
+    function status_button_connected() {
+        if (document.getElementById("button_connected").value == "connected") {
+            document.getElementById("button_connected").value = "disconnect";
+            document.getElementById("button_connected").className = "btn btn-danger mb-3";
+            document.getElementById("icon_connected").className = "ti-signal";
+            $("#button_connected span").text(" DECONECTAR");
+            socket.emit('command', '1');
+        } else {
+
+            if (document.getElementById("button_started").value == "started") {
+                document.getElementById("button_connected").value = "connected";
+                document.getElementById("button_connected").className = "btn btn-success mb-3";
+                document.getElementById("icon_connected").className = "ti-rss-alt";
+                $("#button_connected span").text(" CONECTAR");
+                socket.emit('command', '3');
+            } else {
+                console.log("Pare a leitura antes de desconectar!");
+            }
+        }
+    }
+
+    function status_button_started() {
+        if (document.getElementById("button_started").value == "started") {
+            if (document.getElementById("button_connected").value == "disconnect") {
+                document.getElementById("button_started").value = "stopped";
+                document.getElementById("button_started").className = "btn btn-danger mb-3";
+                document.getElementById("icon_started").className = "ti-control-stop";
+                $("#button_started span").text(" PARAR");
+                socket.emit('command', '11');
+            } else {
+                console.log("Conecte-se ao Reader!");
+            }
+        }
+        else {
+            document.getElementById("button_started").value = "started";
+            document.getElementById("button_started").className = "btn btn-success mb-3";
+            document.getElementById("icon_started").className = "ti-control-play";
+            $("#button_started span").text(" INICIAR");
+            socket.emit('command', '2');
+        }
+    }
+
+
+    // request.
+    $(document).ready(function () {
+        socket.on('connect', function () {
+            socket.emit('user_connected');
+        });
+    });
+
+    socket.on('cmd_notification', function (data) {
+        $('#cmd').text(data['cmd'])
+        console.log(data['cmd'])
+    });
+
+    socket.on('readers_counter', function (data) {
+        $('#reader_01').html(data['reader_01'])
+        $('#reader_02').text(data['reader_02'])
+        $('#reader_03').text(data['reader_03'])
+        $('#reader_04').text(data['reader_04'])
+        $('#reader_all_uniq').text(data['reader_all_uniq'])
+    });
+
+    var numbers_received_tags = [];
+
+    socket.on('tags', function (data) {
+        numbers_received_tags.push(data['tag'])
+        numbers_received_tags_string = '';
+
+        for (var i = 0; i < numbers_received_tags.length; i++) {
+            numbers_received_tags_string = numbers_received_tags_string + '<tr><td>' + numbers_received_tags[i].toString() + '</td></tr>';
+        }
+
+        $('#tags').html(numbers_received_tags_string)
+    });
+</script>
+
+{% endblock %}
