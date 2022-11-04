@@ -42,7 +42,7 @@ ruamel.yaml==0.16.5
 six==1.13.0
 sllurp==0.5.1
 toml==0.10.0
-Twisted==19.10.0
+Twisted==22.10.0
 typed-ast==1.4.0
 vext==0.7.3
 vext.gi==0.7.0
